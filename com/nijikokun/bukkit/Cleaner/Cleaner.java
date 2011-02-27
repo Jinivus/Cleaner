@@ -1,17 +1,13 @@
 package com.nijikokun.bukkit.Cleaner;
 
-import com.nijikokun.bukkit.General.General;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-import org.bukkit.Server;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /*
@@ -79,26 +75,25 @@ public class Cleaner extends JavaPlugin {
      */
     public static boolean debugging;
 
-    public Cleaner(PluginLoader pluginLoader, Server instance, PluginDescriptionFile desc, File folder, File plugin, ClassLoader cLoader) {
-        super(pluginLoader, instance, desc, folder, plugin, cLoader);
 
-        registerEvents();
-	log.info(Messaging.bracketize(name) + " version " + Messaging.bracketize(version) + " ("+codename+") loaded");
-    }
 
-    public void onDisable() {
+    @Override
+	public void onDisable() {
 	log.info(Messaging.bracketize(name) + " version " + Messaging.bracketize(version) + " ("+codename+") disabled");
     }
 
-    public void onEnable() {
+    @Override
+	public void onEnable() {
+    registerEvents();
 	setup();
 	setupCommands();
 	setupPermissions();
 	setupItems();
+	log.info(Messaging.bracketize(name) + " version " + Messaging.bracketize(version) + " ("+codename+") loaded");
     }
 
     private void registerEvents() {
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_COMMAND, l, Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, l, Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_MOVE, l, Priority.Normal, this);
     }
 
@@ -121,9 +116,9 @@ public class Cleaner extends JavaPlugin {
     public void setupPermissions() {
 	Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
 
-	if(this.Permissions == null) {
+	if(Cleaner.Permissions == null) {
 	    if(test != null) {
-		this.Permissions = (Permissions)test;
+		Cleaner.Permissions = (Permissions)test;
 	    } else {
 		log.info(Messaging.bracketize(name) + " Permission system not enabled. Disabling plugin.");
 		this.getServer().getPluginManager().disablePlugin(this);

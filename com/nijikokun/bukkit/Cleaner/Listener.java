@@ -56,7 +56,7 @@ public class Listener extends PlayerListener {
      * @param split The input line split by spaces.
      * @return <code>boolean</code> - True denotes that the command existed, false the command doesn't.
      */
-    public void onPlayerCommand(PlayerChatEvent event) {
+    public void onPlayerCommandPreprocess(PlayerChatEvent event) {
         String[] split = event.getMessage().split(" ");
 	String base = split[0];
         Player player = event.getPlayer();

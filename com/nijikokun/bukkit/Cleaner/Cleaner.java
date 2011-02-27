@@ -5,9 +5,12 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import org.bukkit.Server;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /*
@@ -77,13 +80,11 @@ public class Cleaner extends JavaPlugin {
 
 
 
-    @Override
-	public void onDisable() {
+    public void onDisable() {
 	log.info(Messaging.bracketize(name) + " version " + Messaging.bracketize(version) + " ("+codename+") disabled");
     }
 
-    @Override
-	public void onEnable() {
+    public void onEnable() {
     registerEvents();
 	setup();
 	setupCommands();
@@ -116,9 +117,9 @@ public class Cleaner extends JavaPlugin {
     public void setupPermissions() {
 	Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
 
-	if(Cleaner.Permissions == null) {
+	if(this.Permissions == null) {
 	    if(test != null) {
-		Cleaner.Permissions = (Permissions)test;
+		this.Permissions = (Permissions)test;
 	    } else {
 		log.info(Messaging.bracketize(name) + " Permission system not enabled. Disabling plugin.");
 		this.getServer().getPluginManager().disablePlugin(this);
